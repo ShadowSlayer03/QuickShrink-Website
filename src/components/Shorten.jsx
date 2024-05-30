@@ -13,7 +13,7 @@ const Shorten = () => {
   const [urls, setUrls] = useState([]);
   const [modalURL, setModalURL] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const initialRender = useRef(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [action, setAction] = useState("");
@@ -87,12 +87,23 @@ const Shorten = () => {
 
   const handleShrink = async () => {
     if (inputVal.length === 0) {
-      setError(true);
+      setError("Please Provide Input!");
       setTimeout(() => {
-        setError(false);
+        setError("");
       }, 2000);
       return;
     }
+
+    // Check if the URL is already shortened
+    const urlExists = urls.some((url) => url.originalUrl === inputVal);
+    if (urlExists) {
+      setError("URL Already Shortened!");
+      setTimeout(() => {
+        setError("");
+      }, 2000);
+      return;
+    }
+
     setLoading(true);
 
     let apiData = {};
@@ -131,16 +142,16 @@ const Shorten = () => {
           originalUrl: inputVal,
           shortenedUrl: apiData.short
             ? apiData.short
-            : `${import.meta.env.VITE_API_URL}/${apiData.slug}`,
+            : `https://qshrink.fun/${apiData.slug}`,
           date: formattedDate,
           expiryDate: formattedExpiry,
         },
       ]);
     } catch (error) {
       console.error("Error during URL shortening:", error);
-      setError(true);
+      setError("Sorry! URL Could Not be Shortened due to some Error!");
       setTimeout(() => {
-        setError(false);
+        setError("");
       }, 2000);
     }
 
@@ -202,9 +213,9 @@ const Shorten = () => {
           Shrink Now!
         </button>
       </div>
-      {error && (
+      {error!="" && (
         <h4 className="text-red-500 text-lg font-outfit mt-[3vw]">
-          Please Provide Input!
+          {error}
         </h4>
       )}
       <div className="mt-7 text-white font-outfit flex items-center">
@@ -237,7 +248,7 @@ const Shorten = () => {
           ></input>
         </div>
       )}
-      <div className="w-[87%] mt-[10vh] rounded-lg overflow-x-auto">
+      <div className="w-[87%] mt-[10vh] rounded-lg overflow-x-auto relative">
         <table id="urls" className="min-w-full table-fixed">
           <thead className="url-list bg-[#451297]/60 py-[3vh] px-[4vh] rounded-t-xl font-outfit text-white">
             <tr>
@@ -251,10 +262,17 @@ const Shorten = () => {
           </thead>
           <tbody className="bg-[#64c3ff]/30 py-[3vh] px-[4vh] text-[#f6f4ff] text-sm font-outfit">
             {loading ? (
-              <Loader />
+              <tr className="relative">
+                <td></td>
+                <td></td>
+                <Loader />
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
             ) : urls?.length === 0 ? (
               <tr>
-                <td colSpan="6" className="text-[1.1vw] text-center">
+                <td colSpan="6" className="text-base md:text-[1.1vw] p-10">
                   No URLs to Show!
                 </td>
               </tr>

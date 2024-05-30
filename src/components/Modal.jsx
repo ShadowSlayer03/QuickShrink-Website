@@ -1,24 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%,-50%)",
-    width: "30vw",
-    height: "35vh",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "2vw",
-    backgroundColor: "#510e9a",
-    color: "#fff",
-    borderRadius: "20px",
-    textAlign: "center",
-    fontFamily: "Outfit,sans-serif",
-  },
+const getCustomStyles = () => {
+  const width = window.innerWidth;
+
+  if (width < 768) { // Small screens
+    return {
+      content: {
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%,-50%)",
+        width: "85vw",
+        height: "33vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "10px",
+        alignItems: "center",
+        gap: "10vw",
+        backgroundColor: "#510e9a",
+        color: "#fff",
+        borderRadius: "20px",
+        textAlign: "center",
+        fontFamily: "Outfit,sans-serif",
+      },
+    };
+  } else { // Large screens
+    return {
+      content: {
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%,-50%)",
+        width: "30vw",
+        height: "35vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "2vw",
+        backgroundColor: "#510e9a",
+        color: "#fff",
+        borderRadius: "20px",
+        textAlign: "center",
+        fontFamily: "Outfit,sans-serif",
+      },
+    };
+  }
 };
 
 function Modal({ isOpen, onRequestClose, onDelete, action, url }) {
@@ -28,18 +55,30 @@ function Modal({ isOpen, onRequestClose, onDelete, action, url }) {
   const [logo3, setLogo3] = useState(false);
   const [logo4, setLogo4] = useState(false);
   const [logo5, setLogo5] = useState(false);
+  const [customStyles, setCustomStyles] = useState(getCustomStyles());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCustomStyles(getCustomStyles());
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <ReactModal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      contentLabel="Delete URL Modal"
+      contentLabel="URL Modal"
       style={customStyles}
     >
       {action === "delete" ? (
         <>
           <div className="text">
-            <h2>Are you sure you want to delete this URL?</h2>
+            <h2 className="whitespace-nowrap">Are you sure you want to delete this URL?</h2>
             <p>This action cannot be undone.</p>
           </div>
           <div className="buttons flex gap-5">
@@ -51,7 +90,7 @@ function Modal({ isOpen, onRequestClose, onDelete, action, url }) {
             </button>
             <button
               className="px-10 h-12 w-32 border-[#fff] bg-red-500"
-              onClick={()=>onDelete(url)}
+              onClick={() => onDelete(url)}
             >
               Delete
             </button>
