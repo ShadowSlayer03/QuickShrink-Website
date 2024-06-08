@@ -78,7 +78,7 @@ const TableRow = ({ url, setUrls, handleDeleteUrl, handleShareUrl }) => {
 
   return (
     <>
-      <tr>
+      <tr className="table-row">
         <td className="w-56 md:w-72 p-5 whitespace-nowrap">
           {shortenedUrl}{" "}
           <i
@@ -93,7 +93,7 @@ const TableRow = ({ url, setUrls, handleDeleteUrl, handleShareUrl }) => {
           <QRCodeSVG value={shortenedUrl} size={70} />
         </td>
         <td className="w-48 p-5">{date}</td>
-        <td className="w-44 p-5">
+        <td className="w-44 p-5 relative">
           <DatePicker
             selected={
               expiryState instanceof Date && !isNaN(expiryState)
@@ -104,6 +104,30 @@ const TableRow = ({ url, setUrls, handleDeleteUrl, handleShareUrl }) => {
             customInput={<CustomInput />}
             dateFormat="MMMM-dd-yyyy"
             minDate={creationDate}
+            popperPlacement="bottom-end"
+            popperModifiers={[
+              {
+                name: "offset",
+                options: {
+                  offset: [0, 8],
+                },
+              },
+              {
+                name: "preventOverflow",
+                options: {
+                  rootBoundary: "viewport",
+                  tether: false,
+                  altAxis: true,
+                },
+              },
+              {
+                name: "flip",
+                options: {
+                  behavior: ["bottom"],
+                },
+              },
+            ]}
+            popperClassName="date-picker-popper"
           />
         </td>
         <td className="w-24 p-9 flex items-center justify-center gap-2">

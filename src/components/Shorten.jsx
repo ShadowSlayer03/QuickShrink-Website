@@ -213,10 +213,8 @@ const Shorten = () => {
           Shrink Now!
         </button>
       </div>
-      {error!="" && (
-        <h4 className="text-red-500 text-lg font-outfit mt-[3vw]">
-          {error}
-        </h4>
+      {error != "" && (
+        <h4 className="text-red-500 text-lg font-outfit mt-[3vw]">{error}</h4>
       )}
       <div className="mt-7 text-white font-outfit flex items-center">
         <h3
@@ -248,8 +246,8 @@ const Shorten = () => {
           ></input>
         </div>
       )}
-      <div className="w-[87%] mt-[10vh] rounded-lg overflow-x-auto relative">
-        <table id="urls" className="min-w-full table-fixed">
+      <div className="w-[87%] mt-[10vh] rounded-lg relative overflow-auto md:overflow-visible">
+        <table id="urls" className="w-full table-fixed overflow-visible">
           <thead className="url-list bg-[#451297]/60 py-[3vh] px-[4vh] rounded-t-xl font-outfit text-white">
             <tr>
               <th className="w-56 md:w-72 h-15 p-5">Shortened Url</th>
@@ -260,7 +258,7 @@ const Shorten = () => {
               <th className="w-24 h-15 p-5">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-[#64c3ff]/30 py-[3vh] px-[4vh] text-[#f6f4ff] text-sm font-outfit">
+          <tbody className="bg-[#64c3ff]/30 py-[3vh] px-[4vh] text-[#f6f4ff] text-sm font-outfit overflow-visible">
             {loading ? (
               <tr className="relative">
                 <td></td>

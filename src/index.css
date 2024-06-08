@@ -82,6 +82,12 @@ th, td {
 
 
 
+
+.date-picker-popper {
+  z-index: 9999 !important; /* Ensure the date picker is on top of other elements */
+  overflow: visible !important; /* Make sure the popper content is visible */
+}
+
 .react-datepicker__navigation {
   height: 20px;
   width: 20px;
@@ -96,6 +102,7 @@ th, td {
 .react-datepicker__navigation--previous {
   left: 2vw;
   top: 0.2vw;
+  color: black;
   border: 3px solid #ccc;
 }
 
